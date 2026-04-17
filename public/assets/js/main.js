@@ -49,72 +49,72 @@ const passwordToggle = () => {
 }
 
 
-const saerchList = () => {
-	let listItems = [];
+// const saerchList = () => {
+// 	let listItems = [];
 
-	// JSON load
-	$.getJSON("assets/ajax/search.json", function(data) {
-		listItems = data.listItems;
-	});
+// 	// JSON load
+// 	$.getJSON("assets/ajax/search.json", function(data) {
+// 		listItems = data.listItems;
+// 	});
 
-	// Search functionality
-	$("#searchInput").on("keyup", function() {
-		let query = $(this).val().toLowerCase();
-		let searchContainer = $("#searchContainer");
-		searchContainer.empty();
-		searchContainer.hide();
+// 	// Search functionality
+// 	$("#searchInput").on("keyup", function() {
+// 		let query = $(this).val().toLowerCase();
+// 		let searchContainer = $("#searchContainer");
+// 		searchContainer.empty();
+// 		searchContainer.hide();
 		
-		$('#recentlyResults').hide();
+// 		$('#recentlyResults').hide();
 		
-		if (query.length === 0) {
-			searchContainer.hide();
-			$('#recentlyResults').show();
-			return;
-		}
+// 		if (query.length === 0) {
+// 			searchContainer.hide();
+// 			$('#recentlyResults').show();
+// 			return;
+// 		}
 
-		let matched = listItems.filter(item =>
-			item.name.toLowerCase().includes(query) ||
-			item.url.toLowerCase().includes(query)
-		);
+// 		let matched = listItems.filter(item =>
+// 			item.name.toLowerCase().includes(query) ||
+// 			item.url.toLowerCase().includes(query)
+// 		);
 
-		if (matched.length > 0) {
-			let grouped = {};
-			matched.forEach(item => {
-				if (!grouped[item.category]) grouped[item.category] = [];
-				grouped[item.category].push(item);
-			});
+// 		if (matched.length > 0) {
+// 			let grouped = {};
+// 			matched.forEach(item => {
+// 				if (!grouped[item.category]) grouped[item.category] = [];
+// 				grouped[item.category].push(item);
+// 			});
 
-			for (let cat in grouped) {
-				searchContainer.append(
-					`<span class="text-uppercase text-2xs fw-semibold text-muted d-block mb-2">${cat}</span>`
-				);
-				let ul = $("<ul class='list-inline search-list'></ul>");
-				grouped[cat].forEach(item => {
-					ul.append(
-						`<li>
-							<a class="search-item" href="${item.url}">
-								<i class="${item.icon}"></i> <span>${item.name}</span>
-							</a>
-						</li>`
-					);
-				});
-				searchContainer.append(ul);
-			}
-			searchContainer.show();
-		} else {
-			searchContainer.append(`
-				<div class="text-center pb-5 pt-4">
-					<div class="avatar avatar-lg bg-danger-subtle shadow-secondary rounded-circle text-danger mb-3 m-auto">
-						<i class="fi fi-rr-assessment"></i>
-					</div>
-					<h5 class="mb-1">No result found</h5>
-					<div class="text-muted">Please try again with a different query</div>
-				</div>
-			`);
-			searchContainer.show();
-		}
-	});
-};
+// 			for (let cat in grouped) {
+// 				searchContainer.append(
+// 					`<span class="text-uppercase text-2xs fw-semibold text-muted d-block mb-2">${cat}</span>`
+// 				);
+// 				let ul = $("<ul class='list-inline search-list'></ul>");
+// 				grouped[cat].forEach(item => {
+// 					ul.append(
+// 						`<li>
+// 							<a class="search-item" href="${item.url}">
+// 								<i class="${item.icon}"></i> <span>${item.name}</span>
+// 							</a>
+// 						</li>`
+// 					);
+// 				});
+// 				searchContainer.append(ul);
+// 			}
+// 			searchContainer.show();
+// 		} else {
+// 			searchContainer.append(`
+// 				<div class="text-center pb-5 pt-4">
+// 					<div class="avatar avatar-lg bg-danger-subtle shadow-secondary rounded-circle text-danger mb-3 m-auto">
+// 						<i class="fi fi-rr-assessment"></i>
+// 					</div>
+// 					<h5 class="mb-1">No result found</h5>
+// 					<div class="text-muted">Please try again with a different query</div>
+// 				</div>
+// 			`);
+// 			searchContainer.show();
+// 		}
+// 	});
+// };
 
 
 const currentYear = () => {
@@ -519,7 +519,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Waves.init();
 	initAppToggler();
 	passwordToggle();
-	saerchList();
+	// saerchList();
 	setElementHeight();
 	currentYear();
 	initSectionCheckboxSync();
