@@ -54,23 +54,24 @@
           <div class="dropdown text-end ms-sm-3 ms-2 ms-lg-4" style="cursor: pointer;">
             <a class="d-flex align-items-center py-2" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="true">
               <div class="text-end me-2 d-none d-lg-inline-block">
-                <div class="fw-bold text-dark">David</div>
+                <!-- <div class="fw-bold text-dark">David</div> -->
+                <div class="fw-bold text-dark">{{ userDisplayName$ | async }}</div>
                 <small class="text-body d-block lh-sm">
-                  <i class="fi fi-rr-angle-down text-3xs me-1"></i> Administrador
+                  <i class="fi fi-rr-angle-down text-3xs me-1"></i> {{ (currentUser$ | async)?.role }}
                 </small>
               </div>
               <div class="avatar avatar-sm rounded-circle avatar-status-success">
-                <img src="assets/images/avatar/avatar2.webp" alt="">
+                <img src="{{ avatarUrl$ | async }}" alt="">
               </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end w-225px mt-1">
               <li class="d-flex align-items-center p-2">
                 <div class="avatar avatar-sm rounded-circle">
-                  <img src="assets/images/avatar/avatar2.webp" alt="">
+                  <img src="{{ avatarUrl$ | async }}" alt="">
                 </div>
                 <div class="ms-2">
-                  <div class="fw-bold text-dark">David </div>
-                  <small class="text-body d-block lh-sm">verificarit@gmail.com</small>
+                  <div class="fw-bold text-dark">{{ userDisplayName$ | async }}</div>
+                  <small class="text-body d-block lh-sm">{{ (currentUser$ | async)?.email }}</small>
                 </div>
               </li>
               <li>

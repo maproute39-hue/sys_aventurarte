@@ -1,66 +1,50 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { AuthService, User } from '../../serivices/auth.service';
 import { SharedService } from '../../serivices/shared.service';
-import { AuthService } from '../../serivices/auth.service';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './header.html',
-  styleUrl: './header.css',
+  styleUrl: './header.css'
 })
 export class Header {
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    // private pwaInstallService: PwaInstallService,
-    public sharedService: SharedService
-  ) {}
-   async logout(event: Event) {
-    event.preventDefault();
-    
-    // Mostrar confirmación antes de cerrar sesión
-    const result = await Swal.fire({
-      title: '¿Estás seguro?',
-      text: '¿Deseas cerrar tu sesión?',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3f51b5',
-      cancelButtonColor: '#f44336',
-      confirmButtonText: 'Sí, cerrar sesión',
-      cancelButtonText: 'Cancelar',
-      reverseButtons: true
-    });
+  currentUser$!: Observable<User | null>;
+  userDisplayName$!: Observable<string>;
+  avatarUrl$!: Observable<string>;
 
-    if (result.isConfirmed) {
-      try {
-        // Llamar al servicio de autenticación para cerrar sesión
-        this.authService.logout();
-        
-        // Mostrar confirmación de cierre de sesión exitoso
-        await Swal.fire({
-          title: 'Sesión cerrada',
-          text: 'Has cerrado sesión correctamente',
-          icon: 'success',
-          confirmButtonColor: '#3f51b5',
-          confirmButtonText: 'Aceptar'
-        });
-        
-        // Redirigir a la página de login
-        this.router.navigate(['/login']);
-      } catch (error) {
-        console.error('Error al cerrar sesión:', error);
-        await Swal.fire({
-          title: 'Error',
-          text: 'Ocurrió un error al cerrar la sesión',
-          icon: 'error',
-          confirmButtonColor: '#3f51b5'
-        });
-      }
-    }
+  constructor(public authService: AuthService,
+    public sharedService: SharedService
+  ) {
+    this.currentUser$ = this.authService.currentUser$;
+
+    this.userDisplayName$ = this.currentUser$.pipe(
+      map((user: User | null) =>
+        user?.name?.trim() ||
+        user?.username?.trim() ||
+        user?.email?.trim() ||
+        'Usuario'
+      )
+    );
+
+    this.avatarUrl$ = this.currentUser$.pipe(
+      map((user: User | null) => {
+        if (!user?.avatar) {
+          return 'assets/images/avatar/avatar2.webp';
+        }
+
+        return `https://db.buckapi.site:8015/api/files/users/${user.id}/${user.avatar}`;
+      })
+    );
+  }
+
+  logout(event?: Event): void {
+    event?.preventDefault();
+    this.authService.logout();
   }
 }
